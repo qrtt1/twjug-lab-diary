@@ -1,3 +1,7 @@
+* [實作示範的播放清單](https://www.youtube.com/playlist?list=PLRle6wVrCU6OS5tFzDAzAaDKiSw41_cz5)
+
+-----
+
 透過初學者的用書學習，難以寫出好的程式碼。
 
 >> 除了那些教你如何寫出好的程式碼的書之外。
