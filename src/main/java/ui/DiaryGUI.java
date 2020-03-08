@@ -1,16 +1,18 @@
 package ui;
 
+import domain.DiaryFile;
 import domain.Editor;
 import domain.EditorManager;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 public class DiaryGUI extends JFrame {
@@ -33,22 +35,40 @@ public class DiaryGUI extends JFrame {
 
         JMenuItem openEmptyFile = new JMenuItem("開新檔案");
         fileMenu.add(openEmptyFile);
+        bindEditorEvent(openEmptyFile, () -> editorManager.newEmptyEditor());
 
-        bindOpenEmptyFile(openEmptyFile);
+        JMenuItem openFile = new JMenuItem("開啟舊檔");
+        fileMenu.add(openFile);
+        bindEditorEvent(openFile, () -> {
+
+            JFileChooser chooser = new JFileChooser();
+            chooser.setCurrentDirectory(new File("."));
+            int returnVal = chooser.showOpenDialog(DiaryGUI.this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                return editorManager.openEditor(new DiaryFileImpl(chooser.getSelectedFile()));
+            }
+            return null;
+        });
+
     }
 
-    private void bindOpenEmptyFile(JMenuItem openEmptyFile) {
-        openEmptyFile.addActionListener(new ActionListener() {
+    private void bindEditorEvent(JMenuItem jMenuItem, EditorCreator creator) {
+        jMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Editor editor = creator.create();
+                if (editor == null) {
+                    return;
+                }
                 // add JTextArea to tabs
                 // open empty editor
                 // bind event
                 JTextArea textArea = new JTextArea();
+
+                // 更新 view 的內容
+                textArea.setText(editor.getDiary().getContent());
                 tabs.add(textArea);
                 tabs.setSelectedComponent(textArea);
-
-                Editor editor = editorManager.newEmptyEditor();
                 textArea.getDocument().addDocumentListener(new DocumentListener() {
                     @Override
                     public void insertUpdate(DocumentEvent e) {
