@@ -16,6 +16,12 @@ public class EditorManager {
         return editor;
     }
 
+    public Editor openEditor(DiaryFile file) {
+        Editor editor = newEmptyEditor();
+        editor.onContentChanged(file.getContent());
+        return editor;
+    }
+
     public Editor getActiveEditor() {
         return acitveEditor;
     }
@@ -23,4 +29,5 @@ public class EditorManager {
     public void setActiveEditor(int index) {
         acitveEditor = editorList.get(index);
     }
+
 }

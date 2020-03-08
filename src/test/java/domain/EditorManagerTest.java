@@ -3,6 +3,8 @@ package domain;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+
 public class EditorManagerTest {
 
     @Test
@@ -22,7 +24,16 @@ public class EditorManagerTest {
         Assert.assertEquals("第1篇日記", m.getActiveEditor().getDiary().getContent());
     }
 
+    @Test
     public void testOpenEditor() {
+        EditorManager m = new EditorManager();
+        Editor editor = m.openEditor(new DiaryFile() {
 
+            @Override
+            public String getContent() {
+                return "舊日記";
+            }
+        });
+        Assert.assertEquals("舊日記", m.getActiveEditor().getDiary().getContent());
     }
 }
