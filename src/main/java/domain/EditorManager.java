@@ -6,12 +6,12 @@ import java.util.List;
 public class EditorManager {
 
     private List<Editor> editorList = new ArrayList<>();
-    private Editor acitveEditor;
+    private Editor activeEditor;
 
 
     public Editor newEmptyEditor() {
         Editor editor = new Editor();
-        acitveEditor = editor;
+        activeEditor = editor;
         editorList.add(editor);
         return editor;
     }
@@ -23,11 +23,11 @@ public class EditorManager {
     }
 
     public Editor getActiveEditor() {
-        return acitveEditor;
+        return activeEditor;
     }
 
     public void setActiveEditor(int index) {
-        acitveEditor = editorList.get(index);
+        activeEditor = editorList.get(index);
     }
 
 }
