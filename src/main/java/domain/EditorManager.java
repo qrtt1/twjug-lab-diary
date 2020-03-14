@@ -18,7 +18,7 @@ public class EditorManager {
 
     public Editor openEditor(DiaryFile file) {
         Editor editor = newEmptyEditor();
-        editor.onContentChanged(file.getContent());
+        editor.loadFromFile(file);
         return editor;
     }
 

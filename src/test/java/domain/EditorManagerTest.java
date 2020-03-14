@@ -3,8 +3,6 @@ package domain;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
-
 public class EditorManagerTest {
 
     @Test
@@ -33,7 +31,35 @@ public class EditorManagerTest {
             public String getContent() {
                 return "舊日記";
             }
+
+            @Override
+            public void setContent(String content) {
+
+            }
         });
         Assert.assertEquals("舊日記", m.getActiveEditor().getDiary().getContent());
+    }
+
+    @Test
+    public void testSaveFile() {
+        EditorManager m = new EditorManager();
+        Editor editor = m.newEmptyEditor();
+        editor.onContentChanged("實作存檔");
+        editor.saveToFile(new DiaryFile() {
+
+            private String storage;
+
+            @Override
+            public String getContent() {
+                return storage;
+            }
+
+            @Override
+            public void setContent(String content) {
+                this.storage = content;
+            }
+        });
+
+        Assert.assertEquals("實作存檔", m.openEditor(editor.getDiaryFile()).getDiary().getContent());
     }
 }

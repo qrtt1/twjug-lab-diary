@@ -23,4 +23,9 @@ public class DiaryFileImpl implements DiaryFile {
         }
         return null;
     }
+
+    @Override
+    public void setContent(String content) {
+        throw new RuntimeException("TODO");
+    }
 }
