@@ -26,6 +26,13 @@ public class DiaryFileImpl implements DiaryFile {
 
     @Override
     public void setContent(String content) {
-        throw new RuntimeException("TODO");
+        try {
+            if (content == null) {
+                content = "";
+            }
+            Files.write(file.toPath(), content.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

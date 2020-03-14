@@ -14,11 +14,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DiaryGUI extends JFrame {
     private JPanel panel;
     private JTabbedPane tabs;
     private EditorManager editorManager = new EditorManager();
+    private AtomicInteger counter = new AtomicInteger(0);
 
     public DiaryGUI() {
         super("DiaryGUI");
@@ -45,11 +47,42 @@ public class DiaryGUI extends JFrame {
             chooser.setCurrentDirectory(new File("."));
             int returnVal = chooser.showOpenDialog(DiaryGUI.this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                return editorManager.openEditor(new DiaryFileImpl(chooser.getSelectedFile()));
+                Editor editor = editorManager.openEditor(new DiaryFileImpl(chooser.getSelectedFile()));
+                return editor;
             }
             return null;
         });
 
+        JMenuItem saveFile = new JMenuItem("儲存檔案");
+        fileMenu.add(saveFile);
+        saveFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Editor activeEditor = editorManager.getActiveEditor();
+                if (activeEditor.getDiaryFile() == null) {
+                    JFileChooser chooser = new JFileChooser();
+                    chooser.setCurrentDirectory(new File("."));
+                    int returnVal = chooser.showSaveDialog(DiaryGUI.this);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        activeEditor.saveToFile(new DiaryFileImpl(chooser.getSelectedFile()));
+                    }
+                } else {
+                    activeEditor.saveToFile(activeEditor.getDiaryFile());
+                }
+
+                updateTabTitle(activeEditor);
+            }
+        });
+
+    }
+
+    private void updateTabTitle(Editor editor) {
+        if (editor.getDiaryFile() == null) {
+            tabs.setTitleAt(tabs.getSelectedIndex(), "untitled-" + counter.incrementAndGet());
+            return;
+        }
+        DiaryFileImpl impl = (DiaryFileImpl) editor.getDiaryFile();
+        tabs.setTitleAt(tabs.getSelectedIndex(), impl.file.getName());
     }
 
     private void bindEditorEvent(JMenuItem jMenuItem, EditorCreator creator) {
@@ -69,6 +102,8 @@ public class DiaryGUI extends JFrame {
                 textArea.setText(editor.getDiary().getContent());
                 tabs.add(textArea);
                 tabs.setSelectedComponent(textArea);
+                editorManager.setActiveEditor(tabs.getSelectedIndex());
+                updateTabTitle(editorManager.getActiveEditor());
                 textArea.getDocument().addDocumentListener(new DocumentListener() {
                     @Override
                     public void insertUpdate(DocumentEvent e) {
