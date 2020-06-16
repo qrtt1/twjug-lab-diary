@@ -1,6 +1,8 @@
+
+
 * [Medium 簡介短文](https://medium.com/@qrtt1/twjug-lite-%E7%B7%B4%E7%BF%92%E5%AF%AB%E5%87%BA%E5%A5%BD%E6%87%82%E7%9A%84%E7%A8%8B%E5%BC%8F-6edf86102bd2)
 * [實作示範的播放清單](https://www.youtube.com/playlist?list=PLRle6wVrCU6OS5tFzDAzAaDKiSw41_cz5)
-
+* [這場 Talk 的錄影](https://www.youtube.com/watch?v=KIto1OQxwsY)
 -----
 
 透過初學者的用書學習，難以寫出好的程式碼。
